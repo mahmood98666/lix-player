@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { 
   X, 
   Sliders, 
@@ -11,14 +11,18 @@ import {
 } from 'lucide-react-native';
 import { LixSettingsModalProps, QualityOption } from '../types';
 
-const DEFAULT_SPEEDS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+export const DEFAULT_SPEEDS = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0];
 
-const DEFAULT_QUALITIES: QualityOption[] = [
+export const DEFAULT_QUALITIES: QualityOption[] = [
   { id: 'Auto', label: 'Auto (Recommended)' },
+  { id: '4K', label: '4K (2160p Ultra HD)' },
+  { id: '2K', label: '2K (1440p Quad HD)' },
   { id: '1080p', label: '1080p (Full HD)' },
   { id: '720p', label: '720p (HD)' },
   { id: '480p', label: '480p (Standard)' },
   { id: '360p', label: '360p (Data Saver)' },
+  { id: '240p', label: '240p (Low)' },
+  { id: '144p', label: '144p (Lowest)' },
 ];
 
 export const LixSettingsModal: React.FC<LixSettingsModalProps> = ({
@@ -136,27 +140,29 @@ export const LixSettingsModal: React.FC<LixSettingsModalProps> = ({
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.optionsList}>
-                {qualityOptions.map((opt) => {
-                  const isSelected = selectedQuality === opt.id;
-                  return (
-                    <TouchableOpacity
-                      key={opt.id}
-                      style={[styles.optionRow, isSelected && { backgroundColor: `${themeColor}15` }]}
-                      onPress={() => {
-                        onSelectQuality(opt.id);
-                        handleClose();
-                      }}
-                      activeOpacity={0.75}
-                    >
-                      <Text style={[styles.optionText, isSelected && { color: themeColor, fontWeight: '800' }]}>
-                        {opt.label}
-                      </Text>
-                      {isSelected && <Check size={16} color={themeColor} />}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+              <ScrollView style={styles.scrollArea} showsVerticalScrollIndicator={false}>
+                <View style={styles.optionsList}>
+                  {qualityOptions.map((opt) => {
+                    const isSelected = selectedQuality === opt.id;
+                    return (
+                      <TouchableOpacity
+                        key={opt.id}
+                        style={[styles.optionRow, isSelected && { backgroundColor: `${themeColor}15` }]}
+                        onPress={() => {
+                          onSelectQuality(opt.id);
+                          handleClose();
+                        }}
+                        activeOpacity={0.75}
+                      >
+                        <Text style={[styles.optionText, isSelected && { color: themeColor, fontWeight: '800' }]}>
+                          {opt.label}
+                        </Text>
+                        {isSelected && <Check size={16} color={themeColor} />}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </ScrollView>
             </View>
           )}
 
@@ -177,28 +183,30 @@ export const LixSettingsModal: React.FC<LixSettingsModalProps> = ({
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.optionsList}>
-                {speedOptions.map((speed) => {
-                  const isSelected = playbackRate === speed;
-                  return (
-                    <TouchableOpacity
-                      key={speed}
-                      style={[styles.optionRow, isSelected && { backgroundColor: `${themeColor}15` }]}
-                      onPress={() => {
-                        onSelectSpeed(speed);
-                        setTab('main');
-                        handleClose();
-                      }}
-                      activeOpacity={0.75}
-                    >
-                      <Text style={[styles.optionText, isSelected && { color: themeColor, fontWeight: '800' }]}>
-                        {speed === 1.0 ? 'Normal (1.0x)' : `${speed}x`}
-                      </Text>
-                      {isSelected && <Check size={16} color={themeColor} />}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+              <ScrollView style={styles.scrollArea} showsVerticalScrollIndicator={false}>
+                <View style={styles.optionsList}>
+                  {speedOptions.map((speed) => {
+                    const isSelected = playbackRate === speed;
+                    return (
+                      <TouchableOpacity
+                        key={speed}
+                        style={[styles.optionRow, isSelected && { backgroundColor: `${themeColor}15` }]}
+                        onPress={() => {
+                          onSelectSpeed(speed);
+                          setTab('main');
+                          handleClose();
+                        }}
+                        activeOpacity={0.75}
+                      >
+                        <Text style={[styles.optionText, isSelected && { color: themeColor, fontWeight: '800' }]}>
+                          {speed === 1.0 ? 'Normal (1.0x)' : `${speed}x`}
+                        </Text>
+                        {isSelected && <Check size={16} color={themeColor} />}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </ScrollView>
             </View>
           )}
         </View>
@@ -288,5 +296,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#334155',
+  },
+  scrollArea: {
+    maxHeight: 340,
   },
 });
