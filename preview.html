@@ -123,10 +123,6 @@
         <!-- Top Bar -->
         <div class="flex items-center justify-between z-20">
           <div class="flex items-center gap-2">
-            <!-- Collapse to In-App Mini-Player Button (YouTube style) -->
-            <button id="btn-collapse-mini" class="w-7 h-7 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-white/10 text-white flex items-center justify-center transition active:scale-95" title="Collapse to Mini-Player">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
             <span id="speed-badge" class="hidden bg-indigo-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-sm">
               1.0x
             </span>
@@ -416,50 +412,15 @@
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="11" width="8" height="7" rx="1" fill="currentColor"/></svg>
             Picture-in-Picture (PiP)
           </button>
-          <button id="demo-trigger-mini" class="flex-1 bg-purple-600/90 hover:bg-purple-600 text-white font-bold py-2 rounded-xl text-xs transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m19 9-7 7-7-7"/></svg>
-            In-App Mini-Player
-          </button>
-        </div>
-        <div class="flex gap-2">
-          <button id="demo-trigger-ad" class="flex-1 bg-indigo-600/90 hover:bg-indigo-600 text-white font-bold py-2 rounded-xl text-xs transition active:scale-95">
-            📢 Test Skippable Ad (5s)
-          </button>
           <button id="demo-trigger-quality" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2 rounded-xl text-xs transition active:scale-95">
             📺 4K Quality Menu
           </button>
         </div>
-      </div>
-    </div>
-
-    <!-- Floating In-App Mini-Player Dock (YouTube mobile style) -->
-    <div id="device-miniplayer-dock" class="hidden absolute bottom-5 left-2.5 right-2.5 bg-slate-900/95 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-2 items-center justify-between gap-2.5 z-50 transition-all duration-300">
-      <div id="miniplayer-expand-trigger" class="flex items-center gap-2.5 flex-1 min-w-0 cursor-pointer group">
-        <div class="relative w-14 h-9 rounded-lg overflow-hidden bg-black shrink-0 border border-white/10 group-hover:scale-105 transition-transform">
-          <img src="https://vjs.zencdn.net/v/oceans.png" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          </div>
+        <div>
+          <button id="demo-trigger-ad" class="w-full bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold py-2 rounded-xl text-xs transition active:scale-95">
+            📢 Test Skippable Ad (5s)
+          </button>
         </div>
-        <div class="flex flex-col min-w-0">
-          <span class="text-[11px] font-bold text-white truncate group-hover:text-indigo-400 transition">Oceans Documentary</span>
-          <span class="text-[9px] text-slate-400 flex items-center gap-1">
-            Tap to expand • <span id="mini-dock-time" class="font-mono text-cyan-400 font-bold">00:00</span>
-          </span>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-1.5 shrink-0">
-        <!-- Mini Play/Pause Toggle -->
-        <button id="mini-dock-play-pause" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center border border-white/10 active:scale-95 transition" title="Play/Pause">
-          <svg id="mini-dock-pause-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-          <svg id="mini-dock-play-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-        </button>
-
-        <!-- Mini Close Button -->
-        <button id="mini-dock-close" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center border border-white/10 active:scale-95 transition" title="Close Miniplayer">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
       </div>
     </div>
 
@@ -571,16 +532,7 @@
     const btnPip = document.getElementById('btn-pip');
     const btnExitPip = document.getElementById('btn-exit-pip');
     const pipActiveOverlay = document.getElementById('pip-active-overlay');
-    const btnCollapseMini = document.getElementById('btn-collapse-mini');
-    const deviceMiniplayerDock = document.getElementById('device-miniplayer-dock');
-    const miniplayerExpandTrigger = document.getElementById('miniplayer-expand-trigger');
-    const miniDockTime = document.getElementById('mini-dock-time');
-    const miniDockPlayPause = document.getElementById('mini-dock-play-pause');
-    const miniDockPauseIcon = document.getElementById('mini-dock-pause-icon');
-    const miniDockPlayIcon = document.getElementById('mini-dock-play-icon');
-    const miniDockClose = document.getElementById('mini-dock-close');
     const demoTriggerPip = document.getElementById('demo-trigger-pip');
-    const demoTriggerMini = document.getElementById('demo-trigger-mini');
 
     let controlsTimer = null;
 
@@ -650,15 +602,11 @@
         pauseIcon.classList.remove('hidden');
         miniPlayIcon.classList.add('hidden');
         miniPauseIcon.classList.remove('hidden');
-        if (miniDockPauseIcon) miniDockPauseIcon.classList.remove('hidden');
-        if (miniDockPlayIcon) miniDockPlayIcon.classList.add('hidden');
       } else {
         playIcon.classList.remove('hidden');
         pauseIcon.classList.add('hidden');
         miniPlayIcon.classList.remove('hidden');
         miniPauseIcon.classList.add('hidden');
-        if (miniDockPauseIcon) miniDockPauseIcon.classList.add('hidden');
-        if (miniDockPlayIcon) miniDockPlayIcon.classList.remove('hidden');
       }
     }
 
@@ -760,7 +708,6 @@
       const cur = video.currentTime;
       const dur = video.duration || 0;
       timeCurrent.textContent = formatTime(cur);
-      if (miniDockTime) miniDockTime.textContent = formatTime(cur);
       if (dur > 0) {
         timeTotal.textContent = formatTime(dur);
         const pct = (cur / dur) * 100;
@@ -818,19 +765,16 @@
       showControls(1200);
     });
 
-    // 1. Picture-in-Picture (Native floating OS desktop window)
+    // Picture-in-Picture (Native floating OS desktop window)
     async function togglePictureInPicture() {
       try {
         if (document.pictureInPictureElement) {
           await document.exitPictureInPicture();
         } else if (document.pictureInPictureEnabled && video.requestPictureInPicture) {
           await video.requestPictureInPicture();
-        } else {
-          collapseToMiniplayer();
         }
       } catch (err) {
-        console.warn('Native PiP error or blocked, activating in-app miniplayer:', err);
-        collapseToMiniplayer();
+        console.warn('Picture-in-Picture error:', err);
       }
     }
 
@@ -865,61 +809,6 @@
         if (document.pictureInPictureElement) {
           await document.exitPictureInPicture();
         }
-      });
-    }
-
-    // 2. In-App Mobile Floating Mini-Player (YouTube mobile style)
-    let isInAppMiniplayer = false;
-
-    function collapseToMiniplayer() {
-      isInAppMiniplayer = true;
-      playerScreenBox.classList.add('hidden');
-      deviceMiniplayerDock.classList.remove('hidden');
-      deviceMiniplayerDock.classList.add('flex');
-      showSeekFeedback('Mini-Player Active');
-    }
-
-    function expandFromMiniplayer() {
-      isInAppMiniplayer = false;
-      playerScreenBox.classList.remove('hidden');
-      deviceMiniplayerDock.classList.add('hidden');
-      deviceMiniplayerDock.classList.remove('flex');
-      showControls(1200);
-    }
-
-    if (btnCollapseMini) {
-      btnCollapseMini.addEventListener('click', (e) => {
-        e.stopPropagation();
-        collapseToMiniplayer();
-      });
-    }
-
-    if (demoTriggerMini) {
-      demoTriggerMini.addEventListener('click', () => {
-        if (isInAppMiniplayer) {
-          expandFromMiniplayer();
-        } else {
-          collapseToMiniplayer();
-        }
-      });
-    }
-
-    if (miniplayerExpandTrigger) {
-      miniplayerExpandTrigger.addEventListener('click', expandFromMiniplayer);
-    }
-
-    if (miniDockPlayPause) {
-      miniDockPlayPause.addEventListener('click', (e) => {
-        e.stopPropagation();
-        togglePlay();
-      });
-    }
-
-    if (miniDockClose) {
-      miniDockClose.addEventListener('click', (e) => {
-        e.stopPropagation();
-        expandFromMiniplayer();
-        video.pause();
       });
     }
 
