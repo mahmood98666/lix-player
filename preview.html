@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lix Player - Live Interactive Preview</title>
+  <title>Lix Player - Mobile & Tablet Device Frame Preview</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
@@ -17,29 +17,92 @@
       background: rgba(148, 163, 184, 0.4);
       border-radius: 4px;
     }
+
+    /* Device Frame Styling */
+    .device-phone-portrait {
+      width: 380px;
+      height: 720px;
+      border-radius: 48px;
+      border: 10px solid #0f172a;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 2px #334155;
+    }
+
+    .device-phone-landscape {
+      width: 680px;
+      height: 350px;
+      border-radius: 40px;
+      border: 10px solid #0f172a;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 2px #334155;
+    }
+
+    .device-tablet {
+      width: 740px;
+      height: 520px;
+      border-radius: 36px;
+      border: 14px solid #0f172a;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 2px #334155;
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 antialiased select-none">
 
-  <!-- Header Branding -->
-  <div class="text-center mb-5 max-w-xl">
+  <!-- Header & Device Switcher -->
+  <div class="text-center mb-4 max-w-xl">
     <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3.5 py-1.5 rounded-full text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2">
       <span class="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span>
-      Live Interactive Showcase
+      Native Mobile & Tablet Frame
     </div>
     <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-      🎬 Lix Player Preview
+      🎬 Lix Player Device Showcase
     </h1>
     <p class="text-slate-400 text-xs sm:text-sm mt-1">
-      Interact with all features (144p to 4K quality, 3.0x speed, 10s skip, lock mode, & ads) directly below without installing!
+      Switch between Mobile Portrait, Landscape, and Tablet frames to preview the player exactly as users see it on real devices!
     </p>
+
+    <!-- Device Frame Selector Toggle -->
+    <div class="inline-flex items-center bg-slate-900 border border-slate-800 p-1.5 rounded-2xl gap-1 mt-3.5 shadow-xl">
+      <button id="toggle-phone-portrait" class="device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+        Mobile Portrait
+      </button>
+
+      <button id="toggle-phone-landscape" class="device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2" ry="2"/><path d="M18 12h.01"/></svg>
+        Mobile Landscape
+      </button>
+
+      <button id="toggle-tablet" class="device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2" ry="2"/><path d="M12 17h.01"/></svg>
+        Tablet (iPad)
+      </button>
+    </div>
   </div>
 
-  <!-- Mobile Frame Container -->
-  <div class="relative w-full max-w-[720px] bg-slate-900 border border-slate-800 rounded-3xl p-3 sm:p-5 shadow-2xl shadow-indigo-950/40">
+  <!-- THE REALISTIC DEVICE FRAME -->
+  <div id="device-wrapper" class="relative device-phone-portrait bg-black flex flex-col overflow-hidden transition-all duration-300">
     
-    <!-- Player Aspect Box -->
-    <div id="player-box" class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-inner group">
+    <!-- Notch / Dynamic Island Bar (Mobile Portrait only) -->
+    <div id="device-notch-bar" class="w-full h-8 flex items-center justify-between px-6 pt-1 z-30 shrink-0">
+      <span class="text-[11px] font-mono font-bold text-white tracking-tight">9:41</span>
+      <!-- Dynamic Island Pill -->
+      <div class="w-20 h-4 bg-slate-900 rounded-full flex items-center justify-center border border-white/5">
+        <div class="w-2 h-2 rounded-full bg-slate-950 ml-6"></div>
+      </div>
+      <div class="flex items-center gap-1.5 text-white">
+        <!-- 5G -->
+        <span class="text-[9px] font-extrabold tracking-tighter">5G</span>
+        <!-- Battery -->
+        <div class="w-4 h-2 border border-white/60 rounded-xs p-0.5 flex items-center">
+          <div class="w-full h-full bg-white rounded-xs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tablet Camera Dot (Tablet only) -->
+    <div id="device-tablet-cam" class="hidden w-2.5 h-2.5 bg-slate-800 rounded-full mx-auto my-1.5 border border-white/10 shrink-0"></div>
+
+    <!-- MAIN PLAYER SCREEN BOX -->
+    <div id="player-screen-box" class="relative w-full aspect-video bg-black overflow-hidden group shrink-0">
       
       <!-- Video Element -->
       <video
@@ -50,91 +113,91 @@
         playsinline
       ></video>
 
-      <!-- Controls Overlay -->
-      <div id="controls-overlay" class="absolute inset-0 bg-black/45 flex flex-col justify-between p-3 sm:p-4 transition-opacity duration-300">
+      <!-- Video Controls Overlay -->
+      <div id="controls-overlay" class="absolute inset-0 bg-black/45 flex flex-col justify-between p-3 transition-opacity duration-300">
         
         <!-- Top Bar -->
         <div class="flex items-center justify-between z-20">
           <div class="flex items-center gap-2">
-            <span id="speed-badge" class="hidden bg-indigo-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm">
+            <span id="speed-badge" class="hidden bg-indigo-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-sm">
               1.0x
             </span>
-            <span id="quality-badge" class="bg-slate-800/80 backdrop-blur-md text-slate-200 text-[11px] font-bold px-2 py-0.5 rounded-md border border-white/10">
+            <span id="quality-badge" class="bg-slate-900/80 backdrop-blur-md text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded border border-white/10">
               1080p
             </span>
           </div>
 
           <div class="flex items-center gap-2">
             <!-- Lock Button -->
-            <button id="btn-lock" class="w-8 h-8 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-white/10 text-white flex items-center justify-center transition active:scale-95" title="Lock Screen">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <button id="btn-lock" class="w-7 h-7 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-white/10 text-white flex items-center justify-center transition active:scale-95" title="Lock Screen">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </button>
 
             <!-- Settings Button -->
-            <button id="btn-settings" class="w-8 h-8 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-white/10 text-white flex items-center justify-center transition active:scale-95" title="Settings">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <button id="btn-settings" class="w-7 h-7 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-white/10 text-white flex items-center justify-center transition active:scale-95" title="Settings">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
           </div>
         </div>
 
         <!-- Center Controls: [-10s] [Play/Pause] [+10s] -->
-        <div class="flex items-center justify-center gap-6 sm:gap-10 z-20">
+        <div class="flex items-center justify-center gap-6 sm:gap-8 z-20">
           <!-- -10s Rewind -->
-          <button id="btn-rewind" class="relative w-11 h-11 rounded-full bg-slate-900/70 hover:bg-slate-800 text-white flex items-center justify-center border border-white/10 active:scale-95 transition" title="Rewind 10s">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            <span class="absolute bottom-1.5 text-[9px] font-black tracking-tight">10</span>
+          <button id="btn-rewind" class="relative w-10 h-10 rounded-full bg-slate-900/70 hover:bg-slate-800 text-white flex items-center justify-center border border-white/10 active:scale-95 transition" title="Rewind 10s">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span class="absolute bottom-1 text-[8px] font-black">10</span>
           </button>
 
           <!-- Main Play / Pause Circle -->
-          <button id="btn-main-play" class="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/50 active:scale-90 transition" title="Play/Pause">
-            <svg id="play-icon" class="w-7 h-7 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-            <svg id="pause-icon" class="w-7 h-7 hidden" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <button id="btn-main-play" class="w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/50 active:scale-90 transition" title="Play/Pause">
+            <svg id="play-icon" class="w-6 h-6 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            <svg id="pause-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
           </button>
 
           <!-- +10s Forward -->
-          <button id="btn-forward" class="relative w-11 h-11 rounded-full bg-slate-900/70 hover:bg-slate-800 text-white flex items-center justify-center border border-white/10 active:scale-95 transition" title="Forward 10s">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            <span class="absolute bottom-1.5 text-[9px] font-black tracking-tight">10</span>
+          <button id="btn-forward" class="relative w-10 h-10 rounded-full bg-slate-900/70 hover:bg-slate-800 text-white flex items-center justify-center border border-white/10 active:scale-95 transition" title="Forward 10s">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+            <span class="absolute bottom-1 text-[8px] font-black">10</span>
           </button>
         </div>
 
         <!-- Bottom Bar: Seekbar + Time + Controls -->
-        <div class="z-20 flex flex-col gap-1.5">
+        <div class="z-20 flex flex-col gap-1">
           
           <!-- Interactive Seekbar Track -->
-          <div id="seekbar-container" class="relative h-4 flex items-center cursor-pointer group/seek">
+          <div id="seekbar-container" class="relative h-3.5 flex items-center cursor-pointer group/seek">
             <div class="w-full h-1 bg-white/20 rounded-full relative overflow-hidden group-hover/seek:h-1.5 transition-all">
               <div id="seekbar-buffer" class="absolute top-0 left-0 h-full bg-white/30 rounded-full w-[45%]"></div>
               <div id="seekbar-progress" class="absolute top-0 left-0 h-full bg-indigo-500 rounded-full w-[0%]"></div>
             </div>
-            <div id="seekbar-knob" class="absolute w-3 h-3 bg-white rounded-full shadow-md scale-0 group-hover/seek:scale-100 transition-transform -translate-x-1/2 left-[0%]"></div>
+            <div id="seekbar-knob" class="absolute w-2.5 h-2.5 bg-white rounded-full shadow-md scale-0 group-hover/seek:scale-100 transition-transform -translate-x-1/2 left-[0%]"></div>
           </div>
 
           <!-- Bottom Row Controls -->
-          <div class="flex items-center justify-between text-xs font-semibold">
-            <div class="flex items-center gap-3">
+          <div class="flex items-center justify-between text-[11px] font-semibold">
+            <div class="flex items-center gap-2.5">
               <!-- Mini Play/Pause -->
               <button id="btn-mini-play" class="text-white hover:text-indigo-400 transition">
-                <svg id="mini-play-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                <svg id="mini-pause-icon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                <svg id="mini-play-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                <svg id="mini-pause-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
               </button>
 
               <!-- Mute Toggle -->
               <button id="btn-mute" class="text-white hover:text-indigo-400 transition">
-                <svg id="vol-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                <svg id="mute-icon" class="w-4 h-4 hidden text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M11 5 6 9H2v6h4l5 4V5Z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+                <svg id="vol-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <svg id="mute-icon" class="w-3.5 h-3.5 hidden text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M11 5 6 9H2v6h4l5 4V5Z"/></svg>
               </button>
 
               <!-- Timestamps -->
-              <span class="font-mono text-slate-300 text-[11px] tracking-tight">
+              <span class="font-mono text-slate-300 text-[10px] tracking-tight">
                 <span id="time-current">00:00</span> / <span id="time-total" class="text-slate-500">09:56</span>
               </span>
             </div>
 
             <div class="flex items-center gap-2">
               <!-- Fullscreen Button -->
-              <button id="btn-fullscreen" class="text-white hover:text-indigo-400 p-1 transition" title="Toggle Fullscreen">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              <button id="btn-fullscreen" class="text-white hover:text-indigo-400 p-0.5 transition" title="Toggle Fullscreen">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
               </button>
             </div>
           </div>
@@ -145,173 +208,129 @@
 
       <!-- Feedback Bubble (+10s / -10s) -->
       <div id="seek-bubble" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-200">
-        <div class="bg-slate-900/90 border border-white/20 px-4 py-2 rounded-2xl text-white font-black text-sm tracking-widest shadow-2xl backdrop-blur-md">
+        <div class="bg-slate-900/90 border border-white/20 px-3 py-1.5 rounded-xl text-white font-black text-xs tracking-wider shadow-2xl backdrop-blur-md">
           <span id="seek-bubble-text">+10s</span>
         </div>
       </div>
 
       <!-- Locked Banner Overlay -->
       <div id="locked-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-xs hidden flex-col items-center justify-center z-30">
-        <button id="btn-unlock" class="flex items-center gap-2 bg-slate-900/90 hover:bg-slate-800 border border-white/20 px-5 py-2.5 rounded-full text-white font-bold text-xs shadow-2xl transition active:scale-95">
-          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        <button id="btn-unlock" class="flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 border border-white/20 px-4 py-2 rounded-full text-white font-bold text-xs shadow-2xl transition active:scale-95">
+          <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
           Tap to Unlock Screen
         </button>
       </div>
 
       <!-- Skippable Pre-Roll Ad Simulation Overlay -->
-      <div id="ad-overlay" class="absolute inset-0 bg-black/90 hidden flex-col justify-between p-4 z-40">
+      <div id="ad-overlay" class="absolute inset-0 bg-black/90 hidden flex-col justify-between p-3.5 z-40">
         <div class="flex items-center justify-between text-xs text-slate-300">
-          <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase">Ad</span>
-          <span>Sponsored Preview</span>
+          <span class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded text-[9px] uppercase">Ad</span>
+          <span class="text-[11px]">Sponsored Video</span>
         </div>
         <div class="text-center">
-          <p class="text-lg font-bold text-white">Experience High-Resolution 4K Streaming</p>
-          <p class="text-xs text-slate-400 mt-1">Lix Player powers modern mobile video apps</p>
+          <p class="text-sm font-bold text-white">4K Mobile Streaming Engine</p>
+          <p class="text-[11px] text-slate-400">Powering high performance mobile apps</p>
         </div>
         <div class="flex justify-end">
-          <button id="btn-skip-ad" class="bg-slate-800 border border-white/20 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-slate-700 transition">
+          <button id="btn-skip-ad" class="bg-slate-800 border border-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-xl hover:bg-slate-700 transition">
             Skip Ad in <span id="ad-counter">5</span>s
           </button>
         </div>
       </div>
 
       <!-- Settings Bottom Sheet Modal -->
-      <div id="settings-modal" class="absolute inset-0 bg-black/70 backdrop-blur-xs hidden flex-col justify-end z-50">
-        <div class="bg-slate-900 border-t border-slate-800 rounded-t-3xl p-4 sm:p-5 max-h-[85%] flex flex-col shadow-2xl animate-in fade-in slide-in-from-bottom duration-200">
+      <div id="settings-modal" class="absolute inset-0 bg-black/75 backdrop-blur-xs hidden flex-col justify-end z-50">
+        <div class="bg-slate-900 border-t border-slate-800 rounded-t-2xl p-3.5 max-h-[85%] flex flex-col shadow-2xl">
           
           <!-- Tab 1: Main Settings -->
           <div id="tab-main" class="flex flex-col">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-              <span class="font-extrabold text-sm text-white">Playback Settings</span>
+            <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+              <span class="font-extrabold text-xs text-white">Playback Settings</span>
               <button id="btn-close-settings" class="text-slate-400 hover:text-white p-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
             </div>
             
-            <div class="flex flex-col gap-1.5 mt-3">
+            <div class="flex flex-col gap-1 mt-2.5 text-xs">
               <!-- Quality Row -->
-              <button id="btn-nav-quality" class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition">
-                <div class="flex items-center gap-2.5">
-                  <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
+              <button id="btn-nav-quality" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition">
+                <div class="flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
                   <span class="text-xs font-bold text-white">Quality</span>
                 </div>
-                <div class="flex items-center gap-1 text-xs text-slate-400">
+                <div class="flex items-center gap-1 text-[11px] text-slate-400">
                   <span id="active-quality-text">1080p</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
               </button>
 
               <!-- Speed Row -->
-              <button id="btn-nav-speed" class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition">
-                <div class="flex items-center gap-2.5">
-                  <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+              <button id="btn-nav-speed" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition">
+                <div class="flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
                   <span class="text-xs font-bold text-white">Playback Speed</span>
                 </div>
-                <div class="flex items-center gap-1 text-xs text-slate-400">
-                  <span id="active-speed-text">1.0x (Normal)</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                <div class="flex items-center gap-1 text-[11px] text-slate-400">
+                  <span id="active-speed-text">1.0x</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
               </button>
 
               <!-- Loop Video Row -->
-              <button id="btn-toggle-loop" class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition">
-                <div class="flex items-center gap-2.5">
-                  <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+              <button id="btn-toggle-loop" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition">
+                <div class="flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
                   <span class="text-xs font-bold text-white">Loop Video</span>
                 </div>
-                <span id="loop-state-text" class="text-xs font-bold text-slate-400">Off</span>
+                <span id="loop-state-text" class="text-[11px] font-bold text-slate-400">Off</span>
               </button>
             </div>
           </div>
 
           <!-- Tab 2: Quality Selector (144p to 4K) -->
           <div id="tab-quality" class="hidden flex-col">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-              <button id="btn-back-from-quality" class="flex items-center gap-1.5 text-xs font-bold text-slate-200 hover:text-white">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-                Quality
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800 text-xs">
+              <button id="btn-back-from-quality" class="flex items-center gap-1 font-bold text-slate-200 hover:text-white">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                Quality (144p to 4K)
               </button>
-              <button class="btn-close-sub text-slate-400 hover:text-white p-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
+              <button class="btn-close-sub text-slate-400 hover:text-white p-0.5">✕</button>
             </div>
             
-            <div class="custom-scrollbar overflow-y-auto max-h-[220px] flex flex-col gap-1 mt-2.5 pr-1">
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="Auto">
-                <span>Auto (Recommended)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="4K">
-                <span>4K (2160p Ultra HD)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="2K">
-                <span>2K (1440p Quad HD)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold" data-quality="1080p">
-                <span>1080p (Full HD)</span>
-                <span class="text-indigo-400">✓</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="720p">
-                <span>720p (HD)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="480p">
-                <span>480p (Standard)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="360p">
-                <span>360p (Data Saver)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="240p">
-                <span>240p (Low)</span>
-              </button>
-              <button class="quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="144p">
-                <span>144p (Lowest)</span>
-              </button>
+            <div class="custom-scrollbar overflow-y-auto max-h-[160px] flex flex-col gap-0.5 mt-2 pr-1">
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="Auto"><span>Auto (Recommended)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="4K"><span>4K (2160p Ultra HD)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="2K"><span>2K (1440p Quad HD)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold" data-quality="1080p"><span>1080p (Full HD)</span><span class="text-indigo-400">✓</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="720p"><span>720p (HD)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="480p"><span>480p (Standard)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="360p"><span>360p (Data Saver)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="240p"><span>240p (Low)</span></button>
+              <button class="quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-quality="144p"><span>144p (Lowest)</span></button>
             </div>
           </div>
 
           <!-- Tab 3: Speed Selector (Up to 3.0x) -->
           <div id="tab-speed" class="hidden flex-col">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-              <button id="btn-back-from-speed" class="flex items-center gap-1.5 text-xs font-bold text-slate-200 hover:text-white">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-                Playback Speed
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800 text-xs">
+              <button id="btn-back-from-speed" class="flex items-center gap-1 font-bold text-slate-200 hover:text-white">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                Speed (Up to 3.0x)
               </button>
-              <button class="btn-close-sub text-slate-400 hover:text-white p-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
+              <button class="btn-close-sub text-slate-400 hover:text-white p-0.5">✕</button>
             </div>
             
-            <div class="custom-scrollbar overflow-y-auto max-h-[220px] flex flex-col gap-1 mt-2.5 pr-1">
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="0.25">
-                <span>0.25x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="0.5">
-                <span>0.5x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="0.75">
-                <span>0.75x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold" data-speed="1.0">
-                <span>1.0x (Normal)</span>
-                <span class="text-indigo-400">✓</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="1.25">
-                <span>1.25x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="1.5">
-                <span>1.5x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="1.75">
-                <span>1.75x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="2.0">
-                <span>2.0x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="2.5">
-                <span>2.5x</span>
-              </button>
-              <button class="speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="3.0">
-                <span>3.0x (Ultra Fast)</span>
-              </button>
+            <div class="custom-scrollbar overflow-y-auto max-h-[160px] flex flex-col gap-0.5 mt-2 pr-1">
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="0.25"><span>0.25x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="0.5"><span>0.5x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="0.75"><span>0.75x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold" data-speed="1.0"><span>1.0x (Normal)</span><span class="text-indigo-400">✓</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="1.25"><span>1.25x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="1.5"><span>1.5x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="1.75"><span>1.75x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="2.0"><span>2.0x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="2.5"><span>2.5x</span></button>
+              <button class="speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300" data-speed="3.0"><span>3.0x (Ultra Fast)</span></button>
             </div>
           </div>
 
@@ -320,25 +339,119 @@
 
     </div>
 
-    <!-- Quick Action Demo Buttons -->
-    <div class="flex flex-wrap items-center justify-between gap-2.5 mt-4 pt-3 border-t border-slate-800/80 text-xs">
-      <div class="flex items-center gap-2">
-        <button id="demo-trigger-ad" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl transition shadow-sm active:scale-95">
-          📢 Test Skippable Ad (5s)
-        </button>
-        <button id="demo-trigger-quality" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-3 py-1.5 rounded-xl transition active:scale-95">
-          📺 Open 4K Quality Menu
+    <!-- Realistic Mobile Portrait Feed Below Player -->
+    <div id="device-portrait-feed" class="flex-1 bg-slate-950 p-4 flex flex-col overflow-y-auto custom-scrollbar">
+      <!-- Video Title -->
+      <h3 class="text-sm font-bold text-white leading-snug">
+        Big Buck Bunny (4K Ultra HD Sample)
+      </h3>
+      <p class="text-[11px] text-slate-400 mt-1">1.8M views • 2 weeks ago</p>
+
+      <!-- Channel Info -->
+      <div class="flex items-center justify-between mt-3 pb-3 border-b border-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow">
+            ST
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-white">Stulix Studio</h4>
+            <p class="text-[10px] text-slate-400">1.25M subscribers</p>
+          </div>
+        </div>
+        <button class="bg-white text-slate-950 font-extrabold text-[11px] px-3 py-1.5 rounded-full hover:bg-slate-200 transition">
+          Subscribe
         </button>
       </div>
-      <span class="text-slate-500 text-[11px] font-mono">
-        Status: <span id="player-status-badge" class="text-emerald-400 font-bold">Ready</span>
-      </span>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center justify-around py-3 border-b border-slate-800/80 text-slate-300 text-[10px] font-semibold">
+        <div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 10v12"/><path d="M15 10.5a3 3 0 0 0-3-3l-2 1V10h-2v12h10.8a2 2 0 0 0 2-1.6l1.2-6.5a2 2 0 0 0-2-2.4H15Z"/></svg>
+          <span>48K</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+          <span>Share</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          <span>Download</span>
+        </div>
+      </div>
+
+      <!-- Quick Test Triggers -->
+      <div class="mt-3 flex flex-col gap-2">
+        <span class="text-[10px] uppercase font-mono font-bold text-slate-500">Live Device Controls:</span>
+        <div class="flex gap-2">
+          <button id="demo-trigger-ad" class="flex-1 bg-indigo-600/90 hover:bg-indigo-600 text-white font-bold py-2 rounded-xl text-xs transition active:scale-95">
+            📢 Test Skippable Ad (5s)
+          </button>
+          <button id="demo-trigger-quality" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2 rounded-xl text-xs transition active:scale-95">
+            📺 4K Quality Menu
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Home Indicator Bar (Mobile only) -->
+    <div id="device-home-bar" class="w-full pb-2 pt-1 flex justify-center bg-black shrink-0">
+      <div class="w-28 h-1 bg-white/40 rounded-full"></div>
     </div>
 
   </div>
 
-  <!-- JavaScript Logic for Live Preview -->
+  <!-- JavaScript for Device Switching & Player Controls -->
   <script>
+    const deviceWrapper = document.getElementById('device-wrapper');
+    const deviceNotchBar = document.getElementById('device-notch-bar');
+    const deviceTabletCam = document.getElementById('device-tablet-cam');
+    const devicePortraitFeed = document.getElementById('device-portrait-feed');
+    const deviceHomeBar = document.getElementById('device-home-bar');
+    const playerScreenBox = document.getElementById('player-screen-box');
+
+    const togglePhonePortrait = document.getElementById('toggle-phone-portrait');
+    const togglePhoneLandscape = document.getElementById('toggle-phone-landscape');
+    const toggleTablet = document.getElementById('toggle-tablet');
+
+    // Switch device mode
+    function setDeviceMode(mode) {
+      document.querySelectorAll('.device-toggle-btn').forEach(btn => {
+        btn.className = 'device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white';
+      });
+
+      if (mode === 'portrait') {
+        togglePhonePortrait.className = 'device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm';
+        deviceWrapper.className = 'relative device-phone-portrait bg-black flex flex-col overflow-hidden transition-all duration-300';
+        deviceNotchBar.classList.remove('hidden');
+        deviceNotchBar.classList.add('flex');
+        deviceTabletCam.classList.add('hidden');
+        devicePortraitFeed.classList.remove('hidden');
+        deviceHomeBar.classList.remove('hidden');
+        playerScreenBox.className = 'relative w-full aspect-video bg-black overflow-hidden group shrink-0';
+      } else if (mode === 'landscape') {
+        togglePhoneLandscape.className = 'device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm';
+        deviceWrapper.className = 'relative device-phone-landscape bg-black flex flex-col overflow-hidden transition-all duration-300';
+        deviceNotchBar.classList.add('hidden');
+        deviceTabletCam.classList.add('hidden');
+        devicePortraitFeed.classList.add('hidden');
+        deviceHomeBar.classList.remove('hidden');
+        playerScreenBox.className = 'relative w-full h-full bg-black overflow-hidden group flex-1';
+      } else if (mode === 'tablet') {
+        toggleTablet.className = 'device-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm';
+        deviceWrapper.className = 'relative device-tablet bg-black flex flex-col overflow-hidden transition-all duration-300';
+        deviceNotchBar.classList.add('hidden');
+        deviceTabletCam.classList.remove('hidden');
+        devicePortraitFeed.classList.remove('hidden');
+        deviceHomeBar.classList.add('hidden');
+        playerScreenBox.className = 'relative w-full aspect-video bg-black overflow-hidden group shrink-0';
+      }
+    }
+
+    togglePhonePortrait.addEventListener('click', () => setDeviceMode('portrait'));
+    togglePhoneLandscape.addEventListener('click', () => setDeviceMode('landscape'));
+    toggleTablet.addEventListener('click', () => setDeviceMode('tablet'));
+
+    // Video Player Logic
     const video = document.getElementById('main-video');
     const btnMainPlay = document.getElementById('btn-main-play');
     const playIcon = document.getElementById('play-icon');
@@ -383,7 +496,6 @@
     const adCounter = document.getElementById('ad-counter');
     const demoTriggerAd = document.getElementById('demo-trigger-ad');
     const demoTriggerQuality = document.getElementById('demo-trigger-quality');
-    const playerStatusBadge = document.getElementById('player-status-badge');
     const btnFullscreen = document.getElementById('btn-fullscreen');
 
     function formatTime(sec) {
@@ -399,15 +511,11 @@
         pauseIcon.classList.remove('hidden');
         miniPlayIcon.classList.add('hidden');
         miniPauseIcon.classList.remove('hidden');
-        playerStatusBadge.textContent = 'Playing';
-        playerStatusBadge.className = 'text-indigo-400 font-bold';
       } else {
         playIcon.classList.remove('hidden');
         pauseIcon.classList.add('hidden');
         miniPlayIcon.classList.remove('hidden');
         miniPauseIcon.classList.add('hidden');
-        playerStatusBadge.textContent = 'Paused';
-        playerStatusBadge.className = 'text-amber-400 font-bold';
       }
     }
 
@@ -424,7 +532,6 @@
     video.addEventListener('play', () => updatePlayPauseIcons(true));
     video.addEventListener('pause', () => updatePlayPauseIcons(false));
 
-    // Time & Seekbar updates
     video.addEventListener('timeupdate', () => {
       const cur = video.currentTime;
       const dur = video.duration || 0;
@@ -445,17 +552,13 @@
       }
     });
 
-    // Seek on Click
     seekbarContainer.addEventListener('click', (e) => {
       const rect = seekbarContainer.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const fraction = Math.max(0, Math.min(1, clickX / rect.width));
-      if (video.duration) {
-        video.currentTime = fraction * video.duration;
-      }
+      if (video.duration) video.currentTime = fraction * video.duration;
     });
 
-    // Seek feedback bubble
     let seekTimer = null;
     function showSeekFeedback(txt) {
       seekBubbleText.textContent = txt;
@@ -474,29 +577,21 @@
       showSeekFeedback('+10s');
     });
 
-    // Mute Toggle
     btnMute.addEventListener('click', () => {
       video.muted = !video.muted;
-      if (video.muted) {
-        volIcon.classList.add('hidden');
-        muteIcon.classList.remove('hidden');
-      } else {
-        volIcon.classList.remove('hidden');
-        muteIcon.classList.add('hidden');
-      }
+      volIcon.classList.toggle('hidden', video.muted);
+      muteIcon.classList.toggle('hidden', !video.muted);
     });
 
-    // Fullscreen Toggle
+    // Fullscreen toggle: flips between landscape and portrait device mode
     btnFullscreen.addEventListener('click', () => {
-      const box = document.getElementById('player-box');
-      if (!document.fullscreenElement) {
-        box.requestFullscreen?.() || box.webkitRequestFullscreen?.();
+      if (deviceWrapper.classList.contains('device-phone-portrait')) {
+        setDeviceMode('landscape');
       } else {
-        document.exitFullscreen?.();
+        setDeviceMode('portrait');
       }
     });
 
-    // Screen Lock
     btnLock.addEventListener('click', () => {
       lockedOverlay.classList.remove('hidden');
       lockedOverlay.classList.add('flex');
@@ -507,7 +602,6 @@
       lockedOverlay.classList.remove('flex');
     });
 
-    // Settings Modal
     function openSettings() {
       settingsModal.classList.remove('hidden');
       settingsModal.classList.add('flex');
@@ -556,11 +650,11 @@
         activeQualityText.textContent = q;
         qualityBadge.textContent = q;
         document.querySelectorAll('.quality-btn').forEach(b => {
-          b.className = 'quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300';
+          b.className = 'quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300';
           const ck = b.querySelector('span:last-child');
           if (ck && ck.textContent === '✓') ck.remove();
         });
-        btn.className = 'quality-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold';
+        btn.className = 'quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold';
         btn.innerHTML = `<span>${btn.querySelector('span').textContent}</span><span class="text-indigo-400">✓</span>`;
         closeSettings();
         showSeekFeedback(q);
@@ -572,7 +666,7 @@
       btn.addEventListener('click', () => {
         const s = parseFloat(btn.getAttribute('data-speed'));
         video.playbackRate = s;
-        activeSpeedText.textContent = s === 1.0 ? '1.0x (Normal)' : `${s}x`;
+        activeSpeedText.textContent = `${s}x`;
         if (s !== 1.0) {
           speedBadge.textContent = `${s}x`;
           speedBadge.classList.remove('hidden');
@@ -580,31 +674,28 @@
           speedBadge.classList.add('hidden');
         }
         document.querySelectorAll('.speed-btn').forEach(b => {
-          b.className = 'speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-slate-300';
+          b.className = 'speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300';
           const ck = b.querySelector('span:last-child');
           if (ck && ck.textContent === '✓') ck.remove();
         });
-        btn.className = 'speed-btn flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold';
+        btn.className = 'speed-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-indigo-400 bg-indigo-500/10 font-bold';
         btn.innerHTML = `<span>${btn.querySelector('span').textContent}</span><span class="text-indigo-400">✓</span>`;
         closeSettings();
         showSeekFeedback(`${s}x`);
       });
     });
 
-    // Loop video toggle
     btnToggleLoop.addEventListener('click', () => {
       video.loop = !video.loop;
       loopStateText.textContent = video.loop ? 'On' : 'Off';
-      loopStateText.className = video.loop ? 'text-xs font-extrabold text-indigo-400' : 'text-xs font-bold text-slate-400';
+      loopStateText.className = video.loop ? 'text-[11px] font-extrabold text-indigo-400' : 'text-[11px] font-bold text-slate-400';
     });
 
-    // Demo triggers
     demoTriggerQuality.addEventListener('click', () => {
       openSettings();
       btnNavQuality.click();
     });
 
-    // Skippable Ad simulation
     let adInterval = null;
     demoTriggerAd.addEventListener('click', () => {
       video.pause();
