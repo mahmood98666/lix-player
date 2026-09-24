@@ -8,13 +8,26 @@
 
 ---
 
+## 🎮 Live Interactive Preview (Zero Install Required)
+
+Anyone can test **Lix Player** directly in their browser without installing anything!
+
+- **Option 1 (Instant Local Preview):** Double click [`preview.html`](preview.html) in your browser.
+- **Option 2 (One-line preview server):**
+  ```bash
+  npx serve .
+  # Then open http://localhost:3000/preview.html
+  ```
+
+---
+
 ## ✨ Features
 
 - ⚡ **60fps Native Hardware Acceleration:** Powered by Google's **AndroidX Media3 (ExoPlayer)** on Android and Apple's **AVPlayer** on iOS.
 - 🔴 **YouTube-Style Seekbar:** Real-time buffer indicator, active progress bar, smooth knob, and instant touch seek.
 - ⏩ **Double-Tap / Button Fast Skip:** `-10s` rewind & `+10s` fast forward with visual ripple feedback.
-- ⚙️ **Quality Selector:** Easily switch resolutions (`Auto`, `1080p`, `720p`, `480p`, `360p`) with custom bitrate options.
-- ⚡ **Playback Speed Control:** Fast audio-synced speed multipliers (`0.5x`, `0.75x`, `1.0x`, `1.25x`, `1.5x`, `2.0x`).
+- 📺 **Ultra HD Quality Selector (144p to 4K):** Supports `Auto`, `4K (2160p)`, `2K (1440p)`, `1080p`, `720p`, `480p`, `360p`, `240p`, `144p`.
+- ⚡ **Expanded Playback Speed (Up to 3.0x):** Audio-synced speed multipliers: `0.25x`, `0.5x`, `0.75x`, `1.0x`, `1.25x`, `1.5x`, `1.75x`, `2.0x`, `2.5x`, `3.0x`.
 - 🔒 **Screen Lock:** One-tap screen locking to prevent accidental touches while watching videos.
 - ⛶ **Native Fullscreen:** Orientation-aware fullscreen mode with smooth transitions.
 - 📢 **Skippable Ads Support:** Plug-and-play slot for pre-roll, mid-roll, or custom video ad overlays.
