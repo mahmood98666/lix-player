@@ -502,15 +502,27 @@
 
     let controlsTimer = null;
 
-    function showControls() {
+    function hideControls() {
+      if (!video.paused && settingsModal.classList.contains('hidden') && !isScrubbing) {
+        controlsOverlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function showControls(delay = 1200) {
       controlsOverlay.classList.remove('opacity-0', 'pointer-events-none');
       clearTimeout(controlsTimer);
-      if (!video.paused) {
+      if (!video.paused && !isScrubbing) {
         controlsTimer = setTimeout(() => {
-          if (!video.paused && settingsModal.classList.contains('hidden')) {
-            controlsOverlay.classList.add('opacity-0', 'pointer-events-none');
-          }
-        }, 2500);
+          hideControls();
+        }, delay);
+      }
+    }
+
+    function toggleControls() {
+      if (controlsOverlay.classList.contains('opacity-0')) {
+        showControls(1200);
+      } else {
+        hideControls();
       }
     }
 
@@ -520,11 +532,26 @@
       muteIcon.classList.add('hidden');
     }
 
-    playerScreenBox.addEventListener('mousemove', showControls);
+    // Tap on screen to toggle controls (immediate hide if already open, 1.2s auto-hide if opened)
     playerScreenBox.addEventListener('click', (e) => {
-      if (controlsOverlay.classList.contains('opacity-0')) {
-        showControls();
-        e.stopPropagation();
+      if (e.target === playerScreenBox || e.target === controlsOverlay || e.target === video) {
+        toggleControls();
+      }
+    });
+
+    let lastMouseMove = 0;
+    playerScreenBox.addEventListener('mousemove', () => {
+      const now = Date.now();
+      if (now - lastMouseMove > 200) {
+        lastMouseMove = now;
+        showControls(1200);
+      }
+    });
+
+    playerScreenBox.addEventListener('mouseleave', () => {
+      if (!video.paused && !isScrubbing) {
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(hideControls, 300);
       }
     });
 
@@ -671,39 +698,50 @@
       seekTimer = setTimeout(() => seekBubble.classList.add('opacity-0'), 700);
     }
 
-    btnRewind.addEventListener('click', () => {
+    btnRewind.addEventListener('click', (e) => {
+      e.stopPropagation();
       video.currentTime = Math.max(0, video.currentTime - 10);
       showSeekFeedback('-10s');
+      showControls(1200);
     });
 
-    btnForward.addEventListener('click', () => {
+    btnForward.addEventListener('click', (e) => {
+      e.stopPropagation();
       video.currentTime = Math.min(video.duration || 9999, video.currentTime + 10);
       showSeekFeedback('+10s');
+      showControls(1200);
     });
 
-    btnMute.addEventListener('click', () => {
+    btnMute.addEventListener('click', (e) => {
+      e.stopPropagation();
       video.muted = !video.muted;
       volIcon.classList.toggle('hidden', video.muted);
       muteIcon.classList.toggle('hidden', !video.muted);
+      showControls(1200);
     });
 
     // Fullscreen toggle: flips between landscape and portrait device mode
-    btnFullscreen.addEventListener('click', () => {
+    btnFullscreen.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (deviceWrapper.classList.contains('device-phone-portrait')) {
         setDeviceMode('landscape');
       } else {
         setDeviceMode('portrait');
       }
+      showControls(1200);
     });
 
-    btnLock.addEventListener('click', () => {
+    btnLock.addEventListener('click', (e) => {
+      e.stopPropagation();
       lockedOverlay.classList.remove('hidden');
       lockedOverlay.classList.add('flex');
     });
 
-    btnUnlock.addEventListener('click', () => {
+    btnUnlock.addEventListener('click', (e) => {
+      e.stopPropagation();
       lockedOverlay.classList.add('hidden');
       lockedOverlay.classList.remove('flex');
+      showControls(1200);
     });
 
     function openSettings() {
@@ -717,9 +755,13 @@
     function closeSettings() {
       settingsModal.classList.add('hidden');
       settingsModal.classList.remove('flex');
+      showControls(1200);
     }
 
-    btnSettings.addEventListener('click', openSettings);
+    btnSettings.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openSettings();
+    });
     btnCloseSettings.addEventListener('click', closeSettings);
     document.querySelectorAll('.btn-close-sub').forEach(b => b.addEventListener('click', closeSettings));
 
@@ -844,7 +886,7 @@
           if (!video.paused) {
             controlsOverlay.classList.add('opacity-0', 'pointer-events-none');
           }
-        }, 2200);
+        }, 1200);
       }).catch(err => {
         console.log('Autoplay prevented, ready on tap:', err);
         updatePlayPauseIcons(false);
