@@ -82,18 +82,18 @@ export const LixControls: React.FC<LixControlsProps> = ({
   onToggleLock,
   onOpenSettings,
 }) => {
-  // If locked, show only the unlock button
+  // If locked, show only the compact corner unlock button
   if (isLocked) {
     if (!showControls) return null;
     return (
-      <View style={styles.lockedOverlay}>
+      <View style={styles.lockedOverlay} pointerEvents="box-none">
         <TouchableOpacity 
           style={styles.unlockBtn} 
           onPress={onToggleLock}
           activeOpacity={0.85}
         >
-          <Unlock size={18} color="#FFFFFF" />
-          <Text style={styles.unlockBtnText}>Tap to Unlock Screen</Text>
+          <Unlock size={14} color="#818CF8" />
+          <Text style={styles.unlockBtnText}>Unlock</Text>
         </TouchableOpacity>
       </View>
     );
@@ -347,24 +347,24 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    padding: 12,
   },
   unlockBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 6,
     backgroundColor: 'rgba(15, 23, 42, 0.85)',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   unlockBtnText: {
     color: '#FFFFFF',
-    fontSize: 13,
+    fontSize: 11,
     fontWeight: '700',
   },
   seekFeedbackOverlay: {

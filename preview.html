@@ -241,11 +241,12 @@
         </button>
       </div>
 
-      <!-- Locked Banner Overlay -->
-      <div id="locked-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-xs hidden flex-col items-center justify-center z-30">
-        <button id="btn-unlock" class="flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 border border-white/20 px-4 py-2 rounded-full text-white font-bold text-xs shadow-2xl transition active:scale-95">
-          <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
-          Tap to Unlock Screen
+      <!-- Locked Screen Overlay (Transparent, does not darken video, small corner button) -->
+      <div id="locked-overlay" class="absolute inset-0 hidden pointer-events-auto z-30">
+        <!-- Compact Corner Unlock Button -->
+        <button id="btn-unlock" class="absolute top-3 left-3 flex items-center gap-1.5 bg-slate-900/85 hover:bg-slate-800 border border-white/20 px-2.5 py-1 rounded-full text-white font-bold text-[11px] shadow-xl backdrop-blur-md transition-all active:scale-95 duration-300">
+          <svg class="w-3 h-3 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+          <span>Unlock</span>
         </button>
       </div>
 
@@ -922,16 +923,38 @@
       });
     }
 
+    let lockTimer = null;
+
+    function showLockedUnlockBtn() {
+      btnUnlock.classList.remove('opacity-0', 'pointer-events-none');
+      clearTimeout(lockTimer);
+      lockTimer = setTimeout(() => {
+        if (!lockedOverlay.classList.contains('hidden')) {
+          btnUnlock.classList.add('opacity-0', 'pointer-events-none');
+        }
+      }, 2000);
+    }
+
+    lockedOverlay.addEventListener('click', (e) => {
+      if (e.target !== btnUnlock && !btnUnlock.contains(e.target)) {
+        showLockedUnlockBtn();
+      }
+    });
+
     btnLock.addEventListener('click', (e) => {
       e.stopPropagation();
       lockedOverlay.classList.remove('hidden');
-      lockedOverlay.classList.add('flex');
+      lockedOverlay.classList.add('block');
+      controlsOverlay.classList.add('opacity-0', 'pointer-events-none');
+      showSeekFeedback('Screen Locked 🔒');
+      showLockedUnlockBtn();
     });
 
     btnUnlock.addEventListener('click', (e) => {
       e.stopPropagation();
       lockedOverlay.classList.add('hidden');
-      lockedOverlay.classList.remove('flex');
+      lockedOverlay.classList.remove('block');
+      showSeekFeedback('Screen Unlocked 🔓');
       showControls(1200);
     });
 
