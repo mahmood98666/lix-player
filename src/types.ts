@@ -38,6 +38,10 @@ export interface LixPlayerProps {
   onEnded?: () => void;
   /** Callback fired continuously during playback with timestamps */
   onTimeUpdate?: (currentTime: number, duration: number) => void;
+  /** Whether Picture-in-Picture / Mini-Player button is enabled */
+  enablePictureInPicture?: boolean;
+  /** Callback fired when Picture-in-Picture button is pressed */
+  onPictureInPicturePress?: () => void;
   /** Container style overrides */
   style?: StyleProp<ViewStyle>;
 }
@@ -77,11 +81,13 @@ export interface LixControlsProps {
   showControls: boolean;
   seekFeedback: string | null;
   themeColor?: string;
+  enablePictureInPicture?: boolean;
   onTogglePlayPause: (e?: any) => void;
   onSeekBy: (seconds: number, e?: any) => void;
   onSeek: (seconds: number) => void;
   onToggleMute: (e?: any) => void;
   onToggleFullscreen: (e?: any) => void;
+  onTogglePictureInPicture?: (e?: any) => void;
   onToggleLock: (e?: any) => void;
   onOpenSettings: (e?: any) => void;
 }

@@ -22,6 +22,8 @@ export const LixPlayer: React.FC<LixPlayerProps> = ({
   contentId,
   enableAds = false,
   renderAdOverlay,
+  enablePictureInPicture = true,
+  onPictureInPicturePress,
   onEnded,
   onTimeUpdate,
   style,
@@ -192,6 +194,23 @@ export const LixPlayer: React.FC<LixPlayerProps> = ({
     resetHideTimer();
   };
 
+  // Toggle Picture-in-Picture
+  const togglePictureInPicture = async (e?: any) => {
+    e?.stopPropagation?.();
+    if (onPictureInPicturePress) {
+      onPictureInPicturePress();
+      return;
+    }
+    try {
+      if (videoViewRef.current && typeof (videoViewRef.current as any).startPictureInPicture === 'function') {
+        await (videoViewRef.current as any).startPictureInPicture();
+      }
+    } catch (err) {
+      console.warn('LixPlayer Picture-in-Picture error:', err);
+    }
+    resetHideTimer();
+  };
+
   return (
     <View 
       ref={containerRef} 
@@ -210,6 +229,7 @@ export const LixPlayer: React.FC<LixPlayerProps> = ({
         nativeControls={false}
         fullscreenOptions={{ enable: true }}
         showsTimecodes={true}
+        allowsPictureInPicture={enablePictureInPicture}
         onFullscreenEnter={() => setIsFullscreen(true)}
         onFullscreenExit={() => setIsFullscreen(false)}
       />
@@ -251,11 +271,13 @@ export const LixPlayer: React.FC<LixPlayerProps> = ({
           showControls={showControls}
           seekFeedback={seekFeedback}
           themeColor={themeColor}
+          enablePictureInPicture={enablePictureInPicture}
           onTogglePlayPause={togglePlayPause}
           onSeekBy={handleSeekBy}
           onSeek={handleSeek}
           onToggleMute={toggleMute}
           onToggleFullscreen={toggleFullscreen}
+          onTogglePictureInPicture={togglePictureInPicture}
           onToggleLock={() => setIsLocked((prev) => !prev)}
           onOpenSettings={() => setShowSettings(true)}
         />

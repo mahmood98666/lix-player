@@ -35,6 +35,30 @@ const formatTime = (seconds: number = 0) => {
   return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
 };
 
+const PipMiniIcon: React.FC<{ size?: number; color?: string }> = ({ size = 18, color = '#FFFFFF' }) => (
+  <View
+    style={{
+      width: size,
+      height: (size * 14) / 18,
+      borderWidth: 1.6,
+      borderColor: color,
+      borderRadius: 2.5,
+      justifyContent: 'flex-end',
+      alignItems: 'flex-end',
+      padding: 1.5,
+    }}
+  >
+    <View
+      style={{
+        width: size * 0.45,
+        height: size * 0.35,
+        backgroundColor: color,
+        borderRadius: 1,
+      }}
+    />
+  </View>
+);
+
 export const LixControls: React.FC<LixControlsProps> = ({
   isPlaying,
   isBuffering,
@@ -48,11 +72,13 @@ export const LixControls: React.FC<LixControlsProps> = ({
   showControls,
   seekFeedback,
   themeColor = '#4F46E5',
+  enablePictureInPicture = true,
   onTogglePlayPause,
   onSeekBy,
   onSeek,
   onToggleMute,
   onToggleFullscreen,
+  onTogglePictureInPicture,
   onToggleLock,
   onOpenSettings,
 }) => {
@@ -190,6 +216,13 @@ export const LixControls: React.FC<LixControlsProps> = ({
           </View>
 
           <View style={styles.bottomControlsRight}>
+            {/* Picture-in-Picture / Mini-Player Toggle */}
+            {enablePictureInPicture && onTogglePictureInPicture && (
+              <TouchableOpacity onPress={onTogglePictureInPicture} style={styles.miniBtn} activeOpacity={0.75}>
+                <PipMiniIcon size={16} color="#FFFFFF" />
+              </TouchableOpacity>
+            )}
+
             {/* Fullscreen Toggle */}
             <TouchableOpacity onPress={onToggleFullscreen} style={styles.miniBtn} activeOpacity={0.75}>
               {isFullscreen ? (
