@@ -107,11 +107,21 @@
       <!-- Video Element -->
       <video
         id="main-video"
-        class="w-full h-full object-contain"
-        src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        poster="https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&auto=format&fit=crop&q=80"
+        class="w-full h-full object-cover"
+        src="https://vjs.zencdn.net/v/oceans.mp4"
+        poster="https://vjs.zencdn.net/v/oceans.png"
+        autoplay
+        muted
+        loop
         playsinline
+        preload="auto"
       ></video>
+
+      <!-- Tap to Unmute Banner -->
+      <button id="banner-unmute" class="absolute top-3 left-1/2 -translate-x-1/2 z-30 bg-slate-900/90 hover:bg-slate-800 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5 transition active:scale-95">
+        <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M11 5 6 9H2v6h4l5 4V5Z"/></svg>
+        <span>Tap to Unmute 🔊</span>
+      </button>
 
       <!-- Video Controls Overlay -->
       <div id="controls-overlay" class="absolute inset-0 bg-black/45 flex flex-col justify-between p-3 transition-opacity duration-300">
@@ -183,14 +193,14 @@
               </button>
 
               <!-- Mute Toggle -->
-              <button id="btn-mute" class="text-white hover:text-indigo-400 transition">
-                <svg id="vol-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                <svg id="mute-icon" class="w-3.5 h-3.5 hidden text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M11 5 6 9H2v6h4l5 4V5Z"/></svg>
+              <button id="btn-mute" class="text-white hover:text-indigo-400 transition" title="Toggle Mute">
+                <svg id="vol-icon" class="w-3.5 h-3.5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <svg id="mute-icon" class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M11 5 6 9H2v6h4l5 4V5Z"/></svg>
               </button>
 
               <!-- Timestamps -->
               <span class="font-mono text-slate-300 text-[10px] tracking-tight">
-                <span id="time-current">00:00</span> / <span id="time-total" class="text-slate-500">09:56</span>
+                <span id="time-current">00:00</span> / <span id="time-total" class="text-slate-500">00:46</span>
               </span>
             </div>
 
@@ -343,19 +353,19 @@
     <div id="device-portrait-feed" class="flex-1 bg-slate-950 p-4 flex flex-col overflow-y-auto custom-scrollbar">
       <!-- Video Title -->
       <h3 class="text-sm font-bold text-white leading-snug">
-        Big Buck Bunny (4K Ultra HD Sample)
+        Oceans Nature Documentary (4K Ultra HD Sample)
       </h3>
-      <p class="text-[11px] text-slate-400 mt-1">1.8M views • 2 weeks ago</p>
+      <p class="text-[11px] text-slate-400 mt-1">12M views • 1 year ago • Disneynature</p>
 
       <!-- Channel Info -->
       <div class="flex items-center justify-between mt-3 pb-3 border-b border-slate-800/80">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow">
-            ST
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xs text-white shadow">
+            OC
           </div>
           <div>
-            <h4 class="text-xs font-bold text-white">Stulix Studio</h4>
-            <p class="text-[10px] text-slate-400">1.25M subscribers</p>
+            <h4 class="text-xs font-bold text-white">Ocean Explorer Studio</h4>
+            <p class="text-[10px] text-slate-400">3.4M subscribers</p>
           </div>
         </div>
         <button class="bg-white text-slate-950 font-extrabold text-[11px] px-3 py-1.5 rounded-full hover:bg-slate-200 transition">
@@ -453,6 +463,8 @@
 
     // Video Player Logic
     const video = document.getElementById('main-video');
+    const bannerUnmute = document.getElementById('banner-unmute');
+    const controlsOverlay = document.getElementById('controls-overlay');
     const btnMainPlay = document.getElementById('btn-main-play');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
@@ -498,6 +510,42 @@
     const demoTriggerQuality = document.getElementById('demo-trigger-quality');
     const btnFullscreen = document.getElementById('btn-fullscreen');
 
+    let controlsTimer = null;
+
+    function showControls() {
+      controlsOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      clearTimeout(controlsTimer);
+      if (!video.paused) {
+        controlsTimer = setTimeout(() => {
+          if (!video.paused && settingsModal.classList.contains('hidden')) {
+            controlsOverlay.classList.add('opacity-0', 'pointer-events-none');
+          }
+        }, 2500);
+      }
+    }
+
+    function unmuteAudio() {
+      video.muted = false;
+      volIcon.classList.remove('hidden');
+      muteIcon.classList.add('hidden');
+      if (bannerUnmute) bannerUnmute.classList.add('hidden');
+    }
+
+    if (bannerUnmute) {
+      bannerUnmute.addEventListener('click', (e) => {
+        e.stopPropagation();
+        unmuteAudio();
+      });
+    }
+
+    playerScreenBox.addEventListener('mousemove', showControls);
+    playerScreenBox.addEventListener('click', (e) => {
+      if (controlsOverlay.classList.contains('opacity-0')) {
+        showControls();
+        e.stopPropagation();
+      }
+    });
+
     function formatTime(sec) {
       if (isNaN(sec) || sec < 0) return '00:00';
       const m = Math.floor(sec / 60);
@@ -525,12 +573,26 @@
       } else {
         video.pause();
       }
+      showControls();
     }
 
-    btnMainPlay.addEventListener('click', togglePlay);
-    btnMiniPlay.addEventListener('click', togglePlay);
-    video.addEventListener('play', () => updatePlayPauseIcons(true));
-    video.addEventListener('pause', () => updatePlayPauseIcons(false));
+    btnMainPlay.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlay();
+    });
+    btnMiniPlay.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlay();
+    });
+    video.addEventListener('play', () => {
+      updatePlayPauseIcons(true);
+      showControls();
+    });
+    video.addEventListener('pause', () => {
+      updatePlayPauseIcons(false);
+      controlsOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      clearTimeout(controlsTimer);
+    });
 
     video.addEventListener('timeupdate', () => {
       const cur = video.currentTime;
@@ -729,6 +791,23 @@
       adOverlay.classList.remove('flex');
       video.play();
     });
+
+    // Autoplay attempt
+    video.muted = true;
+    const playAttempt = video.play();
+    if (playAttempt !== undefined) {
+      playAttempt.then(() => {
+        updatePlayPauseIcons(true);
+        setTimeout(() => {
+          if (!video.paused) {
+            controlsOverlay.classList.add('opacity-0', 'pointer-events-none');
+          }
+        }, 2200);
+      }).catch(err => {
+        console.log('Autoplay prevented, ready on tap:', err);
+        updatePlayPauseIcons(false);
+      });
+    }
   </script>
 </body>
 </html>
