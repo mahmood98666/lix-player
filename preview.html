@@ -117,12 +117,6 @@
         preload="auto"
       ></video>
 
-      <!-- Tap to Unmute Banner -->
-      <button id="banner-unmute" class="absolute top-3 left-1/2 -translate-x-1/2 z-30 bg-slate-900/90 hover:bg-slate-800 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5 transition active:scale-95">
-        <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M11 5 6 9H2v6h4l5 4V5Z"/></svg>
-        <span>Tap to Unmute 🔊</span>
-      </button>
-
       <!-- Video Controls Overlay -->
       <div id="controls-overlay" class="absolute inset-0 bg-black/45 flex flex-col justify-between p-3 transition-opacity duration-300">
         
@@ -131,9 +125,6 @@
           <div class="flex items-center gap-2">
             <span id="speed-badge" class="hidden bg-indigo-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-sm">
               1.0x
-            </span>
-            <span id="quality-badge" class="bg-slate-900/80 backdrop-blur-md text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded border border-white/10">
-              1080p
             </span>
           </div>
 
@@ -463,7 +454,6 @@
 
     // Video Player Logic
     const video = document.getElementById('main-video');
-    const bannerUnmute = document.getElementById('banner-unmute');
     const controlsOverlay = document.getElementById('controls-overlay');
     const btnMainPlay = document.getElementById('btn-main-play');
     const playIcon = document.getElementById('play-icon');
@@ -528,14 +518,6 @@
       video.muted = false;
       volIcon.classList.remove('hidden');
       muteIcon.classList.add('hidden');
-      if (bannerUnmute) bannerUnmute.classList.add('hidden');
-    }
-
-    if (bannerUnmute) {
-      bannerUnmute.addEventListener('click', (e) => {
-        e.stopPropagation();
-        unmuteAudio();
-      });
     }
 
     playerScreenBox.addEventListener('mousemove', showControls);
@@ -710,7 +692,7 @@
       btn.addEventListener('click', () => {
         const q = btn.getAttribute('data-quality');
         activeQualityText.textContent = q;
-        qualityBadge.textContent = q;
+        if (qualityBadge) qualityBadge.textContent = q;
         document.querySelectorAll('.quality-btn').forEach(b => {
           b.className = 'quality-btn flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold hover:bg-slate-800 text-left text-slate-300';
           const ck = b.querySelector('span:last-child');
