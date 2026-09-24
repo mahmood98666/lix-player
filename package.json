@@ -1,7 +1,7 @@
 {
   "name": "lix-player",
   "version": "1.0.0",
-  "description": "Modern, sleek, and high-performance YouTube-style video player for React Native & Expo built on expo-video.",
+  "description": "The official Stulix video player: A production-ready, YouTube-grade video player for React Native and Expo built on expo-video (AndroidX Media3 & Apple AVPlayer).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -16,21 +16,33 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
+    "stulix",
+    "stulix-player",
+    "lix-player",
     "react-native",
     "expo",
     "expo-video",
     "video-player",
-    "lix-player",
     "youtube-player",
+    "youtube-style-player",
+    "edtech-video-player",
     "media-player",
+    "media3",
     "exoplayer",
-    "avplayer"
+    "avplayer",
+    "picture-in-picture",
+    "custom-video-controls",
+    "streaming"
   ],
-  "author": "Mahmood <https://github.com>",
+  "author": "Mahmood & The Stulix Team <https://github.com/mahmood98666>",
   "license": "MIT",
+  "homepage": "https://github.com/mahmood98666/lix-player#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mahmood/lix-player.git"
+    "url": "https://github.com/mahmood98666/lix-player.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mahmood98666/lix-player/issues"
   },
   "peerDependencies": {
     "expo": ">=51.0.0",
